@@ -16,7 +16,6 @@ employeesRouter.param('employeeId', (req, res, next, employeeId) => {
       next(err);
     } else if (employee) {
       req.employee = employee;
-      req.id = employee.id;
       next();
     } else {
       res.status(404).send();
@@ -83,14 +82,14 @@ employeesRouter.put('/:employeeId', (req, res, next) => {
       $position: position,
       $wage: wage,
       $isCurrentEmployee: isCurrentEmployee,
-      $employeeId: req.id,
+      $employeeId: req.employee.id,
     };
     db.run(sql, values, function (err) {
       if (err) {
         next(err);
       } else {
         db.get(
-          `SELECT * FROM Employee WHERE Employee.id = ${req.id}`,
+          `SELECT * FROM Employee WHERE Employee.id = ${req.employee.id}`,
           (err, employee) => {
             res.status(200).json({ employee: employee });
           }
@@ -110,7 +109,7 @@ employeesRouter.delete('/:employeeId', (req, res, next) => {
       next(err);
     } else {
       db.get(
-        `SELECT * FROM Employee WHERE Employee.id = ${req.id}`,
+        `SELECT * FROM Employee WHERE Employee.id = ${req.employee.id}`,
         (err, employee) => {
           res.status(200).json({ employee: employee });
         }
