@@ -102,7 +102,7 @@ employeesRouter.put('/:employeeId', (req, res, next) => {
 employeesRouter.delete('/:employeeId', (req, res, next) => {
   const sql = `UPDATE Employee SET is_current_employee = 0 WHERE Employee.id = $employeeId`;
   const values = {
-    $employeeId: req.id,
+    $employeeId: req.employee.id,
   };
   db.run(sql, values, function (err) {
     if (err) {
