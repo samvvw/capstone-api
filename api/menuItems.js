@@ -86,4 +86,16 @@ menuItemsRouter.put('/:menuItemId', (req, res, next) => {
   });
 });
 
+menuItemsRouter.delete('/:menuItemId', (req, res, next) => {
+  const sql = `DELETE FROM MenuItem WHERE MenuItem.id = $menuItemId`;
+  const values = { $menuItemId: req.menuItem.id };
+  db.run(sql, values, (err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.status(204).send();
+    }
+  });
+});
+
 module.exports = menuItemsRouter;
