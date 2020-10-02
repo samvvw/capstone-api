@@ -5,6 +5,8 @@ const db = new sqlite3.Database(
   process.env.TEST_DATABASE || './database.sqlite'
 );
 
+// Params
+
 timesheetsRouter.param('timesheetId', (req, res, next, timesheetId) => {
   const sql = `SELECT * FROM Timesheet WHERE Timesheet.id = $timesheetId`;
   const values = { $timesheetId: timesheetId };
@@ -20,6 +22,7 @@ timesheetsRouter.param('timesheetId', (req, res, next, timesheetId) => {
   });
 });
 
+// GET
 timesheetsRouter.get('/', (req, res, next) => {
   const sql = `SELECT * FROM Timesheet WHERE Timesheet.employee_id = $employeeId`;
   const values = req.params.employeeId;
@@ -31,6 +34,7 @@ timesheetsRouter.get('/', (req, res, next) => {
   });
 });
 
+// POST
 timesheetsRouter.post('/', (req, res, next) => {
   const hours = req.body.timesheet.hours;
   const rate = req.body.timesheet.rate;
@@ -60,6 +64,8 @@ timesheetsRouter.post('/', (req, res, next) => {
     });
   }
 });
+
+// PUT
 
 timesheetsRouter.put('/:timesheetId', (req, res, next) => {
   const { hours, rate, date } = req.body.timesheet;
@@ -92,6 +98,19 @@ timesheetsRouter.put('/:timesheetId', (req, res, next) => {
         );
       }
     });
+  });
+});
+
+// DELETE
+timesheetsRouter.delete('/:timesheetId', (req, res, next) => {
+  const sql = `DELETE FROM Timesheet WHERE Timesheet.id = $timesheetId`;
+  const values = { $timesheetId: req.timesheet.id };
+  db.run(sql, values, (err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.status(204).send();
+    }
   });
 });
 
