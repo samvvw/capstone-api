@@ -8,9 +8,9 @@ const errorhandler = require('errorhandler');
 const PORT = process.env.PORT || 4000;
 const apiRouter = require('./api/api');
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use('/api', apiRouter);
 app.use(errorhandler());
